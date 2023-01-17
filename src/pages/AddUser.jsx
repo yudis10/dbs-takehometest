@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { userAdded } from "../features/users/usersSlice";
 
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FieldArray, Form, Formik } from "formik";
 import { advancedSchema } from "../schemas";
@@ -15,7 +14,7 @@ function AddUser() {
   const dispatch = useDispatch();
 
   const onSubmit = async (values, actions) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const { name, addr, ektp, job, dob: birthdate, phone, family } = values;
 
@@ -35,21 +34,8 @@ function AddUser() {
     navigate("/");
   };
 
-  const [addphone, setAddphone] = useState(1);
-  const handleAddPhone = (e) => {
-    e.preventDefault();
-    if (addphone < 3) {
-      setAddphone(addphone + 1);
-    }
-  };
-
-  const [addfamily, setFamily] = useState(1);
-  const handleAddFamily = (e) => {
-    e.preventDefault();
-    if (addfamily < 5) {
-      setFamily(addfamily + 1);
-    }
-  };
+  const emptyPhone = { number: "" };
+  const emptyFamily = { name: "", birthdate: "", relation: "" };
 
   return (
     <div className="mt-16">
@@ -60,8 +46,8 @@ function AddUser() {
           ektp: "",
           addr: "",
           dob: "",
-          phone: [],
-          family: [],
+          phone: [emptyPhone],
+          family: [emptyFamily],
         }}
         // validationSchema={advancedSchema}
         onSubmit={onSubmit}
@@ -108,33 +94,36 @@ function AddUser() {
                 />
               </div>
               <div className="flex flex-col gap-3">
-                {Array.from({ length: addphone }, (_, i) => {
-                  return (
-                    <CustomInput
-                      key={i}
-                      label="Phone"
-                      name={`phone[${i}]`}
-                      type="text"
-                      placeholder="Enter your phone number"
-                    />
-                  );
-                })}
-                {addphone < 3 && (
-                  <button
-                    className="btn btn-sm max-w-fit px-8 border-0"
-                    onClick={handleAddPhone}
-                  >
-                    Add Phone
-                  </button>
-                )}
+                <FieldArray name="phone">
+                  {({ push, remove }) => (
+                    <>
+                      {values.phone.map((_, index) => (
+                        <CustomInput
+                          key={index}
+                          label="Phone"
+                          name={`phone[${index}].number`}
+                          type="text"
+                          placeholder="Enter your phone number"
+                        />
+                      ))}
+
+                      <button
+                        disabled={isSubmitting}
+                        className="btn btn-sm max-w-fit px-8 border-0"
+                        onClick={() => push(emptyPhone)}
+                        type="button"
+                      >
+                        Add Phone
+                      </button>
+                    </>
+                  )}
+                </FieldArray>
               </div>
             </div>
 
             <div className="mt-12">
-              <h2 className="text-xl font-bold mb-4">
-                Family Member ({addfamily})
-              </h2>
-              <table className="table table-zebra w-full">
+              <h2 className="text-xl font-bold mb-4">Family Member ()</h2>
+              <table className="table w-full">
                 <thead>
                   <tr>
                     <th>Name</th>
@@ -143,50 +132,59 @@ function AddUser() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.from({ length: addfamily }, (_, i) => {
-                    return (
-                      <tr key={i}>
-                        <td>
-                          <CustomInput
-                            label=""
-                            name={`family[${i}].name`}
-                            type="text"
-                            placeholder="Enter your Family Name"
-                          />
-                        </td>
-                        <td>
-                          <CustomInput
-                            name={`family[${i}].birthdate`}
-                            type="date"
-                            placeholder="Enter your birthdate"
-                          />
-                        </td>
-                        <td>
-                          <CustomSelect
-                            label=""
-                            name={`family[${i}].relation`}
-                            placeholder="Please select a relation"
-                          >
-                            <option value="">Relationship Status</option>
-                            <option value="brother">Brother</option>
-                            <option value="sister">Sister</option>
-                            <option value="parent">Parent</option>
-                            <option value="child">Child</option>
-                          </CustomSelect>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  <FieldArray name="family">
+                    {({ push, remove }) => (
+                      <>
+                        {values.family.map((_, index) => (
+                          <tr key={index}>
+                            <td>
+                              <CustomInput
+                                label=""
+                                name={`family[${index}].name`}
+                                type="text"
+                                placeholder="Enter your Family Name"
+                              />
+                            </td>
+                            <td>
+                              <CustomInput
+                                name={`family[${index}].birthdate`}
+                                type="date"
+                                placeholder="Enter your birthdate"
+                              />
+                            </td>
+                            <td>
+                              <CustomSelect
+                                label=""
+                                name={`family[${index}].relation`}
+                                placeholder="Please select a relation"
+                              >
+                                <option value="">Relationship Status</option>
+                                <option value="brother">Brother</option>
+                                <option value="sister">Sister</option>
+                                <option value="parent">Parent</option>
+                                <option value="child">Child</option>
+                              </CustomSelect>
+                            </td>
+                          </tr>
+                        ))}
+
+                        <tr>
+                          <td>
+                            <button
+                              disabled={isSubmitting}
+                              className="btn btn-sm max-w-fit px-8 border-0"
+                              onClick={() => push(emptyFamily)}
+                              type="button"
+                            >
+                              Add Family Member
+                            </button>
+                          </td>
+                        </tr>
+                      </>
+                    )}
+                  </FieldArray>
                 </tbody>
               </table>
-              {addfamily < 5 && (
-                <button
-                  className="btn border-0 btn-sm"
-                  onClick={handleAddFamily}
-                >
-                  Add Family Member
-                </button>
-              )}
             </div>
             <div className="flex items-center mt-16 gap-8">
               <button

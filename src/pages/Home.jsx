@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -46,13 +46,15 @@ function Home() {
                     <td>{birthdate}</td>
                     <td>
                       {phone?.map((data, i) => (
-                        <span className="block" key={i + data}>
-                          {data}
-                        </span>
+                        <React.Fragment key={i + data}>
+                          {data.number && (
+                            <span className="block">{data.number}</span>
+                          )}
+                        </React.Fragment>
                       ))}
                     </td>
                     <td>
-                      {family && family.length !== 0 ? (
+                      {family[0].name && family.length !== 0 ? (
                         <label
                           htmlFor="my-modal-4"
                           className="btn bg-[#ff3333] border-0"
