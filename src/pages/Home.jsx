@@ -1,92 +1,104 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 function Home() {
-    
-    const users = useSelector((state) => state.users);
-    
-    const [family, setFamily] = useState()    
+  const users = useSelector((state) => state.users);
+
+  const [family, setFamily] = useState();
 
   return (
-    <>        
-    <div className='mt-12'>        
-    
-        <div className='flex items-center justify-between mb-8'>
-            <h1 className='text-2xl font-bold'>List Users</h1>
-            <Link to={`/form`} className='btn bg-[#ff3333] border-0 tracking-wide'>Create New User</Link>
+    <>
+      <div className="mt-12">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-2xl font-bold">List Users</h1>
+          <Link
+            to={`/form`}
+            className="btn bg-[#ff3333] border-0 tracking-wide"
+          >
+            Create New User
+          </Link>
         </div>
-    
-        <div className="overflow-x-auto">        
-            <table className="table table-zebra w-full">
-                
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>Name</th>
-                    <th>eKTP</th>
-                    <th>Address</th>
-                    <th>Job</th>
-                    <th>Date of Birth</th>
-                    <th>Phone Number</th>
-                    <th>Family</th>
-                </tr>
-                </thead>
-                <tbody>
-                
 
-                {users.map(({ name, ektp, addr, job, birthdate, phone, family }, i) => (
-                <tr key={i}>
+        <div className="overflow-x-auto">
+          <table className="table table-zebra w-full">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Name</th>
+                <th>eKTP</th>
+                <th>Address</th>
+                <th>Job</th>
+                <th>Date of Birth</th>
+                <th>Phone Number</th>
+                <th>Family</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map(
+                ({ name, ektp, addr, job, birthdate, phone, family }, i) => (
+                  <tr key={i}>
                     <td>{i + 1}</td>
                     <td>{name}</td>
                     <td>{ektp}</td>
                     <td>{addr}</td>
                     <td>{job}</td>
                     <td>{birthdate}</td>
-                    <td>{phone?.map((data, i) => (
-                        <span className='block' key={i+data}>{data}</span>                        
-                    ))}</td>
                     <td>
-                        {family.length !== 0 ? <label htmlFor="my-modal-4" className="btn bg-[#ff3333] border-0" onClick={() => setFamily(family)}>Show</label> : ""}
+                      {phone?.map((data, i) => (
+                        <span className="block" key={i + data}>
+                          {data}
+                        </span>
+                      ))}
                     </td>
-                </tr>
-                ))}
-
-                
-                            
-                </tbody>
-            </table>
+                    <td>
+                      {family && family.length !== 0 ? (
+                        <label
+                          htmlFor="my-modal-4"
+                          className="btn bg-[#ff3333] border-0"
+                          onClick={() => setFamily(family)}
+                        >
+                          Show
+                        </label>
+                      ) : (
+                        ""
+                      )}
+                    </td>
+                  </tr>
+                )
+              )}
+            </tbody>
+          </table>
         </div>
-    </div>
+      </div>
 
-    {/* MODAL POPUP */}
-    <input type="checkbox" id="my-modal-4" className="modal-toggle" />
-    <label htmlFor="my-modal-4" className="modal cursor-pointer">
-    <label className="modal-box relative" htmlFor="">
-        <div className="overflow-x-auto">
+      {/* MODAL POPUP */}
+      <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+      <label htmlFor="my-modal-4" className="modal cursor-pointer">
+        <label className="modal-box relative" htmlFor="">
+          <div className="overflow-x-auto">
             <table className="table w-full">
-                <thead>
-                <tr>                    
-                    <th>Name</th>
-                    <th>Birthdate</th>
-                    <th>Relation</th>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Birthdate</th>
+                  <th>Relation</th>
                 </tr>
-                </thead>
-                <tbody>
-                
+              </thead>
+              <tbody>
                 {family?.map(({ name, birthdate, relation }, i) => (
-                <tr key={i}>                    
+                  <tr key={i}>
                     <td>{name}</td>
                     <td>{birthdate}</td>
-                    <td>{relation}</td>                    
-                </tr>
+                    <td>{relation}</td>
+                  </tr>
                 ))}
-                </tbody>
+              </tbody>
             </table>
-        </div>
-    </label>
-    </label>
+          </div>
+        </label>
+      </label>
     </>
-  )
+  );
 }
-export default Home
+export default Home;
