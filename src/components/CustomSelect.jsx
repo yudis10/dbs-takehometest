@@ -11,6 +11,7 @@ const CustomSelect = ({ label, ...props }) => {
         </label>
       )}
       <select
+        autoComplete="off"
         {...field}
         {...props}
         className={`select select-bordered w-full max-w-xs ${

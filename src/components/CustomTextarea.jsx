@@ -11,6 +11,7 @@ function CustomTextarea({ label, ...props }) {
         {label}
       </label>
       <textarea
+        autoComplete="off"
         className="textarea textarea-bordered w-full max-w-xs"
         {...field}
         {...props}

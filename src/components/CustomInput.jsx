@@ -11,6 +11,7 @@ const CustomInput = ({ label, ...props }) => {
         </label>
       )}
       <input
+        autoComplete="off"
         {...field}
         {...props}
         className={`input input-bordered w-full max-w-xs ${

@@ -3,7 +3,7 @@ import { userAdded } from "../features/users/usersSlice";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form, Formik } from "formik";
+import { FieldArray, Form, Formik } from "formik";
 import { advancedSchema } from "../schemas";
 
 import CustomInput from "../components/CustomInput";
@@ -17,7 +17,7 @@ function AddUser() {
   const onSubmit = async (values, actions) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const { name, addr, ektp, job, dob: birthdate } = values;
+    const { name, addr, ektp, job, dob: birthdate, phone, family } = values;
 
     dispatch(
       userAdded({
@@ -26,6 +26,8 @@ function AddUser() {
         addr,
         job,
         birthdate,
+        phone,
+        family,
       })
     );
 
@@ -52,12 +54,20 @@ function AddUser() {
   return (
     <div className="mt-16">
       <Formik
-        initialValues={{ name: "", job: "", ektp: "", addr: "", dob: "" }}
+        initialValues={{
+          name: "",
+          job: "",
+          ektp: "",
+          addr: "",
+          dob: "",
+          phone: [],
+          family: [],
+        }}
         // validationSchema={advancedSchema}
         onSubmit={onSubmit}
       >
-        {({ isSubmitting }) => (
-          <Form>
+        {({ isSubmitting, values }) => (
+          <Form autoComplete="off">
             <h2 className="text-xl font-bold mb-4">Create New User</h2>
             <div className="grid grid-cols-2 gap-8 items-start">
               <div className="grid gap-3">
@@ -103,7 +113,7 @@ function AddUser() {
                     <CustomInput
                       key={i}
                       label="Phone"
-                      name={`phone-${i}`}
+                      name={`phone[${i}]`}
                       type="text"
                       placeholder="Enter your phone number"
                     />
@@ -139,14 +149,14 @@ function AddUser() {
                         <td>
                           <CustomInput
                             label=""
-                            name={`familyname-${i}`}
+                            name={`family[${i}].name`}
                             type="text"
                             placeholder="Enter your Family Name"
                           />
                         </td>
                         <td>
                           <CustomInput
-                            name={`familydob-${i}`}
+                            name={`family[${i}].birthdate`}
                             type="date"
                             placeholder="Enter your birthdate"
                           />
@@ -154,7 +164,7 @@ function AddUser() {
                         <td>
                           <CustomSelect
                             label=""
-                            name={`relation-${i}`}
+                            name={`family[${i}].relation`}
                             placeholder="Please select a relation"
                           >
                             <option value="">Relationship Status</option>
