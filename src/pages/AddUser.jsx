@@ -49,7 +49,7 @@ function AddUser() {
           phone: [emptyPhone],
           family: [emptyFamily],
         }}
-        // validationSchema={advancedSchema}
+        validationSchema={advancedSchema}
         onSubmit={onSubmit}
       >
         {({ isSubmitting, values }) => (
