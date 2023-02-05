@@ -2,11 +2,12 @@
   "name": "dbs-takehometest",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://yudis10.github.io/dbs-takehometest",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d dist",
     "build": "vite build",
     "preview": "vite preview"
   },
